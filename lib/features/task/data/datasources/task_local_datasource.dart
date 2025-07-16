@@ -31,55 +31,64 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
       'id': 1,
       'name': 'Grocery',
       'color': 0xFFB2FF59,
-      'imagePath': 'assets/icons/grocery.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg"
     },
     {
       'id': 2,
       'name': 'Work',
       'color': 0xFFFF8A65,
-      'imagePath': 'assets/icons/work.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
     },
     {
       'id': 3,
       'name': 'Sport',
       'color': 0xFF00E676,
-      'imagePath': 'assets/icons/sport.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
     },
     {
       'id': 4,
       'name': 'Home',
       'color': 0xFFFF5252,
-      'imagePath': 'assets/icons/home.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
     },
     {
       'id': 5,
       'name': 'University',
       'color': 0xFF448AFF,
-      'imagePath': 'assets/icons/university.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
     },
     {
       'id': 6,
       'name': 'Social',
       'color': 0xFFE040FB,
-      'imagePath': 'assets/icons/social.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
     },
     {
       'id': 7,
       'name': 'Music',
       'color': 0xFFEA80FC,
-      'imagePath': 'assets/icons/music.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
     },
     {
       'id': 8,
       'name': 'Health',
       'color': 0xFF69F0AE,
-      'imagePath': 'assets/icons/health.png',
+      'imagePath':
+          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg"
     },
     {
       'id': 9,
       'name': 'Movie',
       'color': 0xFF40C4FF,
-      'imagePath': 'assets/icons/movie.png',
+      'imagePath':
+          'https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg'
     },
   ];
 
@@ -96,8 +105,10 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
       CREATE TABLE tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
+          categoryId INTEGER,
         description TEXT,
         isCompleted INTEGER,
+       createdAt TEXT ,
   FOREIGN KEY (categoryId) REFERENCES categories(id)
       )
     ''');
@@ -121,6 +132,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
     final db = await database;
     final result = await db.rawQuery('''
   SELECT t.id, t.title, t.description, t.isCompleted, 
+  t.createdAt as created_at,
          c.id as category_id, c.name as category_name, c.color as category_color, c.imagePath as category_imagePath
   FROM tasks t
   LEFT JOIN categories c ON t.categoryId = c.id

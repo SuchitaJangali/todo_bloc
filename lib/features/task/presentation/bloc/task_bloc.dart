@@ -18,7 +18,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(TaskLoading());
     try {
       await addTask(event.task);
-      emit(TaskSuccess());
+      final tasks = await getAllTasksUseCase(); // ⬅️ simple `.call()`
+
+      emit(TaskSuccess(tasks: tasks));
     } catch (e) {
       emit(TaskFailure(e.toString()));
     }
@@ -26,9 +28,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Future<void> _onGetAllTasks(
       GetAllTasksEvents events, Emitter<TaskState> emit) async {
+    print("data");
     emit(TaskLoading());
     try {
-      await getAllTasksUseCase();
+      final tasks = await getAllTasksUseCase(); // ⬅️ simple `.call()`
+      emit(TaskSuccess(tasks: tasks));
     } catch (e) {
       emit(TaskFailure(e.toString()));
     }

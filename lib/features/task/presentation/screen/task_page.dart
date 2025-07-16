@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_bloc_new/features/task/data/models/category_model.dart';
+import 'package:todo_bloc_new/features/task/domain/entities/task.dart';
 import '../bloc/task_bloc.dart';
 import '../bloc/task_event.dart';
 import '../bloc/task_state.dart';
+import '../widget/task_card.dart';
 
 class TaskScreen extends StatelessWidget {
   const TaskScreen({super.key});
@@ -36,38 +40,7 @@ class TaskScreen extends StatelessWidget {
               itemCount: state.tasks?.length,
               itemBuilder: (context, index) {
                 final task = state.tasks?[index];
-
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Color(task?.category.color ?? 00000),
-                      backgroundImage:
-                          AssetImage(task?.category.imagePath ?? ""),
-                    ),
-                    title: Text(task?.title ?? ""),
-                    subtitle: Text(task?.description ?? ""),
-                    trailing: IconButton(
-                      icon: Icon(
-                        task?.isCompleted ?? false
-                            ? Icons.check_box
-                            : Icons.check_box_outline_blank,
-                        color: task?.isCompleted ?? false
-                            ? Colors.green
-                            : Colors.grey,
-                      ),
-                      onPressed: () {
-                        // context.read<TaskBloc>().add(
-                        //       UpdateTaskStatusEvent(
-                        //         task.id,
-                        //         !task.isCompleted,
-                        //       ),
-                        //     );
-                      },
-                    ),
-                  ),
-                );
+                return TaskCard(task: task);
               },
             );
           } else {
@@ -77,7 +50,17 @@ class TaskScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Navigate to add task screen
+          context.read<TaskBloc>().add(AddTaskEvent(Task(
+              // id: 1,
+              title: "hmeeko",
+              description: "tygd",
+              isCompleted: false,
+              category: CategoryModel(
+                  id: 1,
+                  name: 'Grocery',
+                  color: 0xFFB2FF59,
+                  imagePath:
+                      "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg")))); // TODO: Navigate to add task screen
         },
         child: const Icon(Icons.add),
       ),

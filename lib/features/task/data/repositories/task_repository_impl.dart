@@ -11,12 +11,12 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<void> addTask(Task task) async {
     final taskModel = TaskModel(
-      id: task.id,
-      title: task.title,
-      description: task.description,
-      isCompleted: task.isCompleted,
-      category: task.category,
-    );
+        // id: task.id,
+        title: task.title,
+        description: task.description,
+        isCompleted: task.isCompleted,
+        category: task.category,
+        createdAt: DateTime.now());
     await localDataSource.insertTask(taskModel);
   }
 
