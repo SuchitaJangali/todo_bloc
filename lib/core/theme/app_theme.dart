@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_bloc_new/core/theme/app_color.dart' show AppColor;
 
 class AppTheme {
-  static _border([Color color = AppColor.greyColor]) => OutlineInputBorder(
+  static _border([Color color = AppColor.borderColor]) => OutlineInputBorder(
         borderSide: BorderSide(color: color, width: 0),
         borderRadius: BorderRadius.circular(10),
       );
