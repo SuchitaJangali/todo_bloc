@@ -7,18 +7,18 @@ class CategoryModel extends Category {
     required int color,
     required String imagePath,
   }) : super(
-    id: id,
-    name: name,
-    color: color,
-    imagePath: imagePath,
-  );
+          id: id,
+          name: name,
+          color: color,
+          imagePath: imagePath,
+        );
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      id: json['id'],
-      name: json['name'],
-      color: json['color'],
-      imagePath: json['imagePath'],
+      id: json['category_id'],
+      name: json['category_name'],
+      color: json['category_color'],
+      imagePath: json['category_imagePath'],
     );
   }
 

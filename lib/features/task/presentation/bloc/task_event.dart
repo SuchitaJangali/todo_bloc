@@ -21,3 +21,19 @@ class AddTaskEvent extends TaskEvent {
 class GetAllTasksEvents extends TaskEvent {
   const GetAllTasksEvents();
 }
+
+class GetAllCategoryEvent extends TaskEvent {
+  const GetAllCategoryEvent();
+}
+
+class SearchTittleEvent extends TaskEvent {
+  final String tittle;
+
+  const SearchTittleEvent(this.tittle);
+}
+
+class UpdateTaskStatusEvent extends TaskEvent {
+  final int id;
+  final bool isCompleted;
+  const UpdateTaskStatusEvent(this.id, this.isCompleted);
+}

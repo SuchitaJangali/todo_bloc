@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:todo_bloc_new/features/task/data/models/category_model.dart';
 import '../models/task_model.dart';
 
 abstract class TaskLocalDataSource {
@@ -8,6 +9,7 @@ abstract class TaskLocalDataSource {
   Future<List<TaskModel>> getAllTasks();
   Future<void> updateTaskStatus(int id, bool isCompleted);
   Future<List<TaskModel>> searchTasksByTitle(String query);
+  Future<List<CategoryModel>> getAllCategory();
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource {
@@ -24,71 +26,67 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
 
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
-  //jsut deafult categeru
 
+  //jsut deafult categeru
   final List<Map<String, dynamic>> defaultCategories = [
     {
       'id': 1,
       'name': 'Grocery',
-      'color': 0xFFB2FF59,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg"
+      'color': 0xFF33691E, // Dark Green
+      'imagePath': "assets/img/grocery.png"
     },
     {
       'id': 2,
       'name': 'Work',
-      'color': 0xFFFF8A65,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
+      'color': 0xFFBF360C, // Deep Orange
+      'imagePath': "assets/img/img.png"
     },
     {
       'id': 3,
       'name': 'Sport',
-      'color': 0xFF00E676,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
+      'color': 0xFF1B5E20, // Dark Green
+      'imagePath': "assets/img/img_7.png"
     },
     {
       'id': 4,
       'name': 'Home',
-      'color': 0xFFFF5252,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
+      'color': 0xFFB71C1C, // Dark Red
+      'imagePath': "assets/img/img_1.png"
     },
     {
       'id': 5,
       'name': 'University',
-      'color': 0xFF448AFF,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
+      'color': 0xFF0D47A1, // Dark Blue
+
+      'imagePath': "assets/img/img_2.png"
     },
     {
       'id': 6,
       'name': 'Social',
-      'color': 0xFFE040FB,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
+      'color': 0xFF4A148C, // Deep Purple
+
+      'imagePath': "assets/img/img_3.png"
     },
     {
       'id': 7,
       'name': 'Music',
-      'color': 0xFFEA80FC,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg",
+      'color': 0xFF6A1B9A, // Purple
+
+      'imagePath': "assets/img/img_4.png"
     },
     {
       'id': 8,
       'name': 'Health',
-      'color': 0xFF69F0AE,
-      'imagePath':
-          "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg"
+      'color': 0xFF00695C, // Teal Dark
+
+      'imagePath': "assets/img/img_5.png"
     },
     {
       'id': 9,
       'name': 'Movie',
-      'color': 0xFF40C4FF,
-      'imagePath':
-          'https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg'
+      'color': 0xFF01579B, // Dark Cyan Blue
+
+      'imagePath': "assets/img/img_6.png"
     },
   ];
 
@@ -108,6 +106,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
           categoryId INTEGER,
         description TEXT,
         isCompleted INTEGER,
+ priority INTEGER,
        createdAt TEXT ,
   FOREIGN KEY (categoryId) REFERENCES categories(id)
       )
@@ -132,7 +131,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
     final db = await database;
     final result = await db.rawQuery('''
   SELECT t.id, t.title, t.description, t.isCompleted, 
-  t.createdAt as created_at,
+  t.createdAt as created_at,t.priority as priority,
          c.id as category_id, c.name as category_name, c.color as category_color, c.imagePath as category_imagePath
   FROM tasks t
   LEFT JOIN categories c ON t.categoryId = c.id
@@ -155,11 +154,31 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   @override
   Future<List<TaskModel>> searchTasksByTitle(String query) async {
     final db = await database;
-    final result = await db.query(
-      'tasks',
-      where: 'title LIKE ?',
-      whereArgs: ['%$query%'],
-    );
+    final result = await db.rawQuery('''
+    SELECT 
+      t.id as id, 
+      t.title as title, 
+      t.description as description, 
+      t.isCompleted as isCompleted, 
+      t.createdAt as created_at, 
+      t.priority as priority,
+      c.id as category_id, 
+      c.name as category_name, 
+      c.color as category_color, 
+      c.imagePath as category_imagePath
+    FROM tasks t
+    LEFT JOIN categories c ON t.categoryId = c.id
+    WHERE t.title LIKE ?
+  ''', ['%$query%']);
+
     return result.map((json) => TaskModel.fromJson(json)).toList();
+  }
+
+  @override
+  Future<List<CategoryModel>> getAllCategory() async {
+    final db = await database;
+    final result = await db.rawQuery(
+        ''' SELECT  c.id as category_id, c.name as category_name, c.color as category_color, c.imagePath as category_imagePath FROM categories c''');
+    return result.map((json) => CategoryModel.fromJson(json)).toList();
   }
 }

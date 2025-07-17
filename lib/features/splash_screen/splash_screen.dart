@@ -25,9 +25,19 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text(
-          'TODO App',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image(
+                height: 100,
+                width: 100,
+                image: AssetImage("assets/img/correct_splash.png")),
+            Text(
+              'UpToDo',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
     );

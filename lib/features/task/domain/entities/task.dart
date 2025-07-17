@@ -1,19 +1,21 @@
 import 'category.dart';
 
 class Task {
-  // final int id;
-  final String title;
+  final int? id;
+  late final String title;
   final String description;
   final bool isCompleted;
   final Category category;
-  final DateTime? createdAt;
+  final DateTime createdAt;
+  final int priority;
 
   Task({
-    this.createdAt,
-    // required this.id,
+    required this.createdAt,
+    this.id,
     required this.title,
     required this.description,
     required this.isCompleted,
     required this.category,
+    required this.priority,
   });
 }

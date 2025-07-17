@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:todo_bloc_new/features/task/domain/entities/category.dart';
 import 'package:todo_bloc_new/features/task/domain/entities/task.dart';
 
 abstract class TaskState extends Equatable {
@@ -14,7 +15,8 @@ class TaskLoading extends TaskState {}
 
 class TaskSuccess extends TaskState {
   final List<Task>? tasks;
-  const TaskSuccess({this.tasks});
+  final List<Category>? category;
+  const TaskSuccess({this.tasks, this.category});
 }
 
 class TaskFailure extends TaskState {
